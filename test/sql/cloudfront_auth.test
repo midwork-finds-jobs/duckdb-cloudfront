@@ -1,6 +1,6 @@
 # name: test/sql/cloudfront_auth.test
 # description: test cloudfront_auth extension
-# group: [cloudfront_auth]
+# group: [sql]
 
 # Before we load the extension, this will fail
 statement error
