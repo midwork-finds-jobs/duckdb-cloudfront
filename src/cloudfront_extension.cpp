@@ -1,6 +1,6 @@
 #define DUCKDB_EXTENSION_MAIN
 
-#include "cloudfront_auth_extension.hpp"
+#include "cloudfront_extension.hpp"
 #include "duckdb.hpp"
 #include "duckdb/common/exception.hpp"
 #include "duckdb/common/string_util.hpp"
@@ -361,7 +361,7 @@ static unique_ptr<BaseSecret> CreateCloudFrontSecretFromEnv(ClientContext &conte
 //===--------------------------------------------------------------------===//
 
 static void CloudFrontVersionFunc(DataChunk &args, ExpressionState &state, Vector &result) {
-	result.SetValue(0, Value("cloudfront_auth v0.1.0"));
+	result.SetValue(0, Value("cloudfront v0.1.0"));
 }
 
 //===--------------------------------------------------------------------===//
@@ -401,21 +401,21 @@ static void LoadInternal(ExtensionLoader &loader) {
 	loader.RegisterFunction(cloudfront_env_func);
 
 	// Register version function
-	auto version_func = ScalarFunction("cloudfront_auth_version", {}, LogicalType::VARCHAR, CloudFrontVersionFunc);
+	auto version_func = ScalarFunction("cloudfront_version", {}, LogicalType::VARCHAR, CloudFrontVersionFunc);
 	loader.RegisterFunction(version_func);
 }
 
-void CloudfrontAuthExtension::Load(ExtensionLoader &loader) {
+void CloudfrontExtension::Load(ExtensionLoader &loader) {
 	LoadInternal(loader);
 }
 
-std::string CloudfrontAuthExtension::Name() {
-	return "cloudfront_auth";
+std::string CloudfrontExtension::Name() {
+	return "cloudfront";
 }
 
-std::string CloudfrontAuthExtension::Version() const {
-#ifdef EXT_VERSION_CLOUDFRONT_AUTH
-	return EXT_VERSION_CLOUDFRONT_AUTH;
+std::string CloudfrontExtension::Version() const {
+#ifdef EXT_VERSION_CLOUDFRONT
+	return EXT_VERSION_CLOUDFRONT;
 #else
 	return "0.1.0";
 #endif
@@ -425,7 +425,7 @@ std::string CloudfrontAuthExtension::Version() const {
 
 extern "C" {
 
-DUCKDB_CPP_EXTENSION_ENTRY(cloudfront_auth, loader) {
+DUCKDB_CPP_EXTENSION_ENTRY(cloudfront, loader) {
 	duckdb::LoadInternal(loader);
 }
 }

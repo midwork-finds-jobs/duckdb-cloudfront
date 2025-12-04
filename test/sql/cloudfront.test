@@ -1,21 +1,21 @@
-# name: test/sql/cloudfront_auth.test
-# description: test cloudfront_auth extension
+# name: test/sql/cloudfront.test
+# description: test cloudfront extension
 # group: [sql]
 
 # Before we load the extension, this will fail
 statement error
-SELECT cloudfront_auth_version();
+SELECT cloudfront_version();
 ----
-Catalog Error: Scalar Function with name cloudfront_auth_version does not exist!
+Catalog Error: Scalar Function with name cloudfront_version does not exist!
 
 # Require statement will ensure this test is run with this extension loaded
-require cloudfront_auth
+require cloudfront
 
 # Confirm the extension works - version function
 query I
-SELECT cloudfront_auth_version();
+SELECT cloudfront_version();
 ----
-cloudfront_auth v0.1.0
+cloudfront v0.1.0
 
 # Test that cloudfront secret type is registered
 query I

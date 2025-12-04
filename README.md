@@ -1,11 +1,11 @@
-# cloudfront_auth
+# Cloudfront authentication for DuckDB
 
 DuckDB extension for AWS CloudFront signed cookie authentication. Automatically generates signed cookies for CloudFront distributions, enabling authenticated HTTP access to protected content.
 
 ## Quick Start
 
 ```sql
-LOAD cloudfront_auth;
+LOAD cloudfront;
 LOAD httpfs;
 
 -- Create CloudFront secret
@@ -26,9 +26,8 @@ SELECT * FROM read_parquet('https://XXXXXXXX.cloudfront.net/api/?params=values')
 ## Installation
 
 ```sql
--- Install from community extensions (when available)
-INSTALL cloudfront_auth FROM community;
-LOAD cloudfront_auth;
+INSTALL cloudfront FROM community;
+LOAD cloudfront;
 ```
 
 ## Usage
@@ -335,7 +334,7 @@ aws s3 cp data.parquet s3://$S3_BUCKET/
 
 # Query with DuckDB
 duckdb -c "
-LOAD cloudfront_auth;
+LOAD cloudfront;
 LOAD httpfs;
 
 CREATE SECRET cf (
@@ -360,7 +359,7 @@ export CLOUDFRONT_PRIVATE_KEY=$(terraform output -raw private_key_pem)
 
 # Query with env provider
 duckdb -c "
-LOAD cloudfront_auth;
+LOAD cloudfront;
 LOAD httpfs;
 
 CREATE SECRET cf (

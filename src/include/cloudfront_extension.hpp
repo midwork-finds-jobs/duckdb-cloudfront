@@ -4,7 +4,7 @@
 
 namespace duckdb {
 
-class CloudfrontAuthExtension : public Extension {
+class CloudfrontExtension : public Extension {
 public:
 	void Load(ExtensionLoader &db) override;
 	std::string Name() override;
