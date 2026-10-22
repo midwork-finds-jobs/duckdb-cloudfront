@@ -1,0 +1,43 @@
+#
+# Builds DuckDB + extension from source and runs the SQL tests.
+# The distribution pipeline links against a prebuilt DuckDB and skips `require cloudfront` tests.
+#
+name: Tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref || '' }}-${{ github.base_ref || '' }}-${{ github.ref != 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and test (linux)
+    runs-on: ubuntu-24.04
+    env:
+      GEN: ninja
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 #v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build ccache libssl-dev
+
+      - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03
+        with:
+          key: tests-${{ github.job }}
+          save: ${{ github.event_name == 'push' }}
+
+      - name: Build
+        run: make release
+
+      - name: Test
+        run: ./build/release/test/unittest "test/*"
+
+      - name: Tests must not be skipped
+        run: |
+          out=$(./build/release/test/unittest test/sql/cloudfront.test 2>&1); echo "$out"
+          echo "$out" | grep -q "All tests passed" && ! echo "$out" | grep -qi "skipped"
