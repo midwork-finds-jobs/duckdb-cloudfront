@@ -196,9 +196,9 @@ static string ExtractDomainFromScope(const vector<string> &scope) {
 // Helper to create the secret with cookie header
 //===--------------------------------------------------------------------===//
 
-static unique_ptr<KeyValueSecret> CreateCloudFrontSecret(const vector<string> &scope, const string &provider,
-                                                         const string &name, const string &cookie_header) {
-	auto secret = make_uniq<KeyValueSecret>(scope, "http", provider, name);
+static unique_ptr<KeyValueSecret> CreateCloudFrontSecret(const vector<string> &scope, const Identifier &provider,
+                                                         const Identifier &name, const string &cookie_header) {
+	auto secret = make_uniq<KeyValueSecret>(scope, Identifier("http"), provider, name);
 
 	// Set extra_http_headers with Cookie
 	vector<Value> keys = {Value("Cookie")};
